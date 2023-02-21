@@ -1,4 +1,4 @@
-name: SonarCloud
+name: Qodana
 on:
   push:
     branches:
