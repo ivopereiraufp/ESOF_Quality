@@ -2,7 +2,7 @@ name: SonarCloud
 on:
   push:
     branches:
-      - main
+      - qodana
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -17,20 +17,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Maven packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Build and analyze
+      - name: 'Qodana Scan'
+        uses: JetBrains/qodana-action@main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ivopereiraufp_ESOF_Quality
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
